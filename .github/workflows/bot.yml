@@ -12,8 +12,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -30,4 +28,16 @@ jobs:
         REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
         REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
         REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
-        SUBREDDIT_NAME: ${{ secrets._
+        SUBREDDIT_NAME: ${{ secrets.SUBREDDIT_NAME }}
+      run: |
+        python3 main.py
+
+    - name: Commit updated state.json
+      run: |
+        if [ -f state.json ]; then
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add state.json
+          git commit -m "Update state.json" || echo "No changes to commit"
+          git push
+        fi
