@@ -1,12 +1,12 @@
-name: Daily Darknet Question Bot
+name: run-bot
 
 on:
-  schedule:
-    - cron: "0 15 * * *"
   workflow_dispatch:
+  schedule:
+    - cron: '0 14 * * *'  # adjust to your desired schedule if needed
 
 jobs:
-  run-bot:
+  run:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,7 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: pip install -r requirements.txt
+      run: pip install praw
 
     - name: Run bot
       env:
