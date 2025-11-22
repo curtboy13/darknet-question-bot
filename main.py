@@ -198,6 +198,37 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"=== ERROR: {e} ===")
         Run and capture output to a file (simple, works for any executable/script): nohup python bot.py > bot.log 2>&1 & # background, logs to bot.log tail -f bot.log # follow log
+            - name: Direct Reddit OAuth token check
+      env:
+        REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+        REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+        REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+        REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+        REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
+      run: |
+        python3 - <<'PY'
+import os, requests, sys
+
+cid = os.getenv("REDDIT_CLIENT_ID")
+csec = os.getenv("REDDIT_CLIENT_SECRET")
+user = os.getenv("REDDIT_USERNAME")
+pw = os.getenv("REDDIT_PASSWORD")
+ua = os.getenv("REDDIT_USER_AGENT", "darknet_daily_bot_v1.0")
+
+print("Performing direct OAuth token request...")
+
+r = requests.post(
+    "https://www.reddit.com/api/v1/access_token",
+    auth=(cid, csec),
+    data={"grant_type": "password", "username": user, "password": pw},
+    headers={"User-Agent": ua},
+    timeout=10
+)
+
+print("HTTP Status:", r.status_code)
+print("Response:", r.text[:500])
+PY
+
         traceback.print_exc()
         # Exit with error code so GitHub Actions shows failure
         exit(1)
