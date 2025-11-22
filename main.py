@@ -13,7 +13,7 @@ SUBREDDIT_NAME = os.getenv("SUBREDDIT_NAME", "darknet_questions")
 POLL_DURATION_DAYS = 1  # 1-day poll
 
 # ============================================================
-# QUESTION BANK — DO NOT MODIFY
+# QUESTION BANK
 # ============================================================
 
 QUESTIONS = [
@@ -41,11 +41,23 @@ QUESTIONS = [
         "answer_index": 2,
         "explanation": "Using Tor Browser from a hardened OS reduces cross-contamination and improves anonymity."
     },
-    # ... (include all your other questions)
+    {
+        "id": 3,
+        "question": "What is the main purpose of PGP in darknet OPSEC?",
+        "options": [
+            "To hide your IP address",
+            "To encrypt and/or verify messages",
+            "To speed up your internet",
+            "To automatically find trusted markets"
+        ],
+        "answer_index": 1,
+        "explanation": "PGP is used to encrypt communications and verify authenticity."
+    },
+    # ... include all your other questions here
 ]
 
 # ============================================================
-# DEBUG FUNCTION - MOVED TO PROPER LOCATION
+# DEBUG FUNCTION - ADD THIS AT THE TOP LEVEL
 # ============================================================
 
 def debug_environment():
@@ -79,7 +91,7 @@ def get_next_question_index(last_index):
     return (last_index + 1) % len(QUESTIONS)
 
 # ============================================================
-# REDDIT — FIXED AUTH BLOCK
+# REDDIT AUTH
 # ============================================================
 
 def get_reddit_instance():
@@ -90,7 +102,7 @@ def get_reddit_instance():
             client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
             username=os.getenv("REDDIT_USERNAME"),
             password=os.getenv("REDDIT_PASSWORD"),
-            user_agent="darknet_daily_bot_v1.0"
+            user_agent="darknet_daily_bot_v1.0"  # Use hardcoded user agent
         )
     except Exception as e:
         raise RuntimeError(f"Failed to initialize Reddit client: {e}")
@@ -173,12 +185,12 @@ def post_daily_question():
     print("State updated.")
 
 # ============================================================
-# ENTRY POINT - FIXED
+# ENTRY POINT - SINGLE, CLEAN VERSION
 # ============================================================
 
 if __name__ == "__main__":
     print("=== Starting Darknet Daily Bot ===")
-    debug_environment()  # This will show what environment variables are set
+    debug_environment()  # This will show what's set up
     
     try:
         post_daily_question()
