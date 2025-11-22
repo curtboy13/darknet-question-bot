@@ -3,7 +3,7 @@ name: run-bot
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 14 * * *'
+    - cron: "0 14 * * *"
 
 jobs:
   run:
@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: "3.11"
 
     - name: Install dependencies
       run: pip install praw
@@ -29,28 +29,28 @@ jobs:
         REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
         REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
       run: |
-        python3 - <<'PY'
-import os, requests
+        python3 - << 'PY'
+        import os, requests
 
-cid = os.getenv("REDDIT_CLIENT_ID")
-csec = os.getenv("REDDIT_CLIENT_SECRET")
-user = os.getenv("REDDIT_USERNAME")
-pw = os.getenv("REDDIT_PASSWORD")
-ua = os.getenv("REDDIT_USER_AGENT", "darknet_daily_bot_v1.0")
+        cid = os.getenv("REDDIT_CLIENT_ID")
+        csec = os.getenv("REDDIT_CLIENT_SECRET")
+        user = os.getenv("REDDIT_USERNAME")
+        pw = os.getenv("REDDIT_PASSWORD")
+        ua = os.getenv("REDDIT_USER_AGENT")
 
-print("Performing direct OAuth token request...")
+        print("Performing direct OAuth token request...")
 
-r = requests.post(
-    "https://www.reddit.com/api/v1/access_token",
-    auth=(cid, csec),
-    data={"grant_type": "password", "username": user, "password": pw},
-    headers={"User-Agent": ua},
-    timeout=10
-)
+        r = requests.post(
+            "https://www.reddit.com/api/v1/access_token",
+            auth=(cid, csec),
+            data={"grant_type": "password", "username": user, "password": pw},
+            headers={"User-Agent": ua},
+            timeout=10
+        )
 
-print("HTTP Status:", r.status_code)
-print("Response:", r.text[:500])
-PY
+        print("HTTP Status:", r.status_code)
+        print("Response:", r.text[:500])
+        PY
 
     - name: Run bot
       env:
