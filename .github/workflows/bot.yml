@@ -45,6 +45,7 @@ r = requests.post(
     auth=(cid, csec),
     data={"grant_type": "password", "username": user, "password": pw},
     headers={"User-Agent": ua},
+    timeout=10
 )
 
 print("HTTP Status:", r.status_code)
