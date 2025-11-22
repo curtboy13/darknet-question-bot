@@ -197,6 +197,7 @@ if __name__ == "__main__":
         print("=== Success! Bot completed. ===")
     except Exception as e:
         print(f"=== ERROR: {e} ===")
+        Run and capture output to a file (simple, works for any executable/script): nohup python bot.py > bot.log 2>&1 & # background, logs to bot.log tail -f bot.log # follow log
         traceback.print_exc()
         # Exit with error code so GitHub Actions shows failure
         exit(1)
