@@ -187,6 +187,27 @@ if __name__ == "__main__":
     try:
         post_daily_question()
     except Exception as e:
+        # Add this function
+def debug_environment():
+    print("=== DEBUG INFO ===")
+    print(f"Client ID: {'SET' if os.getenv('REDDIT_CLIENT_ID') else 'MISSING'}")
+    print(f"Client Secret: {'SET' if os.getenv('REDDIT_CLIENT_SECRET') else 'MISSING'}")
+    print(f"Username: {'SET' if os.getenv('REDDIT_USERNAME') else 'MISSING'}")
+    print(f"Subreddit: {os.getenv('SUBREDDIT_NAME', 'NOT SET')}")
+    print("==================")
+
+# Modify your main section
+if __name__ == "__main__":
+    debug_environment()  # Add this line
+    print("Starting Reddit bot - posting daily question...")
+    try:
+        post_daily_question()
+        print("Success! Bot completed.")
+    except Exception as e:
+        print(f"Error: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
         print("ERROR:", e)
         raise
     print("=== Completed ===")
